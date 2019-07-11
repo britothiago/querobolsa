@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import logo from "../assets/img/querobolsa.png";
 import Modal from "./modal";
+import axios from "axios";
 
 const All = styled.div`
   font-family: "Open Sans", sans-serif;
   font-size: 20px;
   position: relative;
-  
+
   header {
     .container {
       margin-left: 20px;
@@ -124,8 +125,6 @@ const All = styled.div`
   }
 
   main {
-    height: 80vh;
-    background: #FBFBFB;
     padding-left: 80px;
 
     section {
@@ -170,7 +169,7 @@ const All = styled.div`
 
       div {
         border: 1px solid #007a8d;
-        padding 5px 15px;
+        padding: 5px 15px;
       }
 
       .all {
@@ -204,7 +203,7 @@ const All = styled.div`
       .add-course-icon {
         font-size: 400%;
         margin-bottom: 10px;
-        color: #18ACC4;
+        color: #18acc4;
       }
 
       .new-course {
@@ -219,12 +218,13 @@ const All = styled.div`
   }
 
   footer {
+    margin-top: 200px;
     width: 100%;
     color: #fff;
 
     .footer {
       height: 100px;
-      background: #007A8D;
+      background: #007a8d;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -243,7 +243,7 @@ const All = styled.div`
       .text-footer {
         margin-left: 10px;
         font-size: 70%;
-        font-weight:bold;
+        font-weight: bold;
         display: flex;
         flex-direction: column;
       }
@@ -259,7 +259,7 @@ const All = styled.div`
       justify-content: center;
       align-items: center;
       height: 100px;
-      background: #18ACC4;
+      background: #18acc4;
 
       .developed-by {
         font-size: 55%;
@@ -271,7 +271,15 @@ const All = styled.div`
 
 class Home extends Component {
   state = {
-    showModal: true
+    showModal: false,
+    courses: []
+  };
+
+  componentDidMount = async () => {
+    const courses = await axios.get(
+      "https://testapi.io/api/redealumni/scholarships"
+    );
+    this.setState({ courses });
   };
 
   openModal = () => {
@@ -285,7 +293,9 @@ class Home extends Component {
   render() {
     return (
       <All>
-        {this.state.showModal && <Modal modal={this.closeModal} />}
+        {this.state.showModal && (
+          <Modal modal={this.closeModal} courses={this.state.courses} />
+        )}
 
         <header>
           <div className="container">

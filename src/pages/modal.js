@@ -6,6 +6,8 @@ const Box = styled.div`
   height: 100%;
   width: 100%;
   position: absolute;
+  position: fixed;
+  padding-top: 50px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -92,10 +94,112 @@ const Box = styled.div`
         color: rgba(0, 0, 0, 0.7);
       }
     }
+
+    .result-university {
+      font-size: 55%;
+      font-weight: bold;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        margin-left: 5px;
+      }
+
+      .university-name {
+        color: #007a8d;
+      }
+    }
+
+    .result-field {
+      border-bottom: 1px solid #333;
+    }
+
+    .close {
+      margin-top: 50px;
+    }
+
+    .courses-scroll {
+      overflow: auto;
+
+      ul {
+        list-style: none;
+
+        li {
+          margin-bottom: 30px;
+        }
+      }
+
+      .course {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 62%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+        .checkbox-course {
+          margin-left: -40px;
+          width: 10%;
+        }
+
+        .logo-course {
+          width: 25%;
+          img {
+            width: 80px;
+          }
+        }
+
+        .info-course {
+          width: 45%;
+          display: flex;
+          flex-direction: column;
+
+          .title-course {
+            color: #007a8d;
+            font-weight: bold;
+            margin-top: -10px;
+            font-size: 100%;
+          }
+
+          span {
+            font-size: 80%;
+          }
+        }
+
+        .payment-course {
+          display: flex;
+          flex-direction: column;
+          float: right;
+          justify-content: center;
+          align-items: center;
+          width: 20%;
+          font-size: 90%;
+          margin-top: -20px;
+          margin-left: 30px;
+
+          .discounts {
+            display: flex;
+            flex-direction: row;
+
+            strong {
+              color: #0fa866;
+            }
+          }
+
+          .price-course {
+            color: #0fa866;
+            font-weight: bold;
+          }
+        }
+      }
+    }
   }
 `;
 
-const Modal = ({ modal }) => {
+const Modal = ({ modal, courses }) => {
   return (
     <Box>
       <div className="modal" id="modal">
@@ -108,11 +212,11 @@ const Modal = ({ modal }) => {
           <div className="city">
             <span>Selecione sua cidade</span>
             <select>
-              <option>São José dos Campos</option>
+              <option value="" />
             </select>
           </div>
           <div className="city">
-            <span>Selecione sua cidade</span>
+            <span>Selecione o curso de sua preferência</span>
             <select>
               <option />
             </select>
@@ -146,14 +250,56 @@ const Modal = ({ modal }) => {
           </div>
         </div>
 
-        <div className="section-field">
+        <div className="section-field result-field">
           <div className="result">
             <span>Resultado:</span>
           </div>
-          <div className="result">
+          <div className="result-university">
             <span>Ordenar por</span>{" "}
-            <span className="university-name">Nome da Faculdade</span>
+            <span className="university-name">
+              <b>Nome da Faculdade</b>
+            </span>
           </div>
+        </div>
+
+        <div className="section courses-scroll">
+          <ul>
+            {courses.data.map(item => (
+              <li key={Math.ceil(Math.random() * Math.pow(10, 10))}>
+                <div className="course">
+                  <div className="checkbox-course">
+                    <input type="checkbox" name="course-name" />
+                  </div>
+                  <div className="logo-course">
+                    <img
+                      src={item.university.logo_url}
+                      alt={item.university.name}
+                    />
+                  </div>
+                  <div className="info-course">
+                    <span className="title-course">{item.course.name} </span>
+                    <span>{item.course.level}</span>
+                  </div>
+
+                  <div className="payment-course">
+                    <span className="discounts">
+                      Bolsa de&nbsp;<strong>{item.discount_percentage}%</strong>
+                    </span>
+                    <span className="price-course">
+                      R$<strong>{item.price_with_discount}</strong>/mês
+                    </span>
+                  </div>
+
+                  <hr />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="section close">
+          <button className="btn-info" onClick={modal}>
+            cancelar
+          </button>
         </div>
       </div>
     </Box>
