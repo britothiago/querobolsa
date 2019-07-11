@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import logo from "../assets/img/querobolsa.png";
 import Modal from "./modal";
-import axios from "axios";
 
 const All = styled.div`
   font-family: "Open Sans", sans-serif;
@@ -275,13 +274,6 @@ class Home extends Component {
     courses: []
   };
 
-  componentDidMount = async () => {
-    const courses = await axios.get(
-      "https://testapi.io/api/redealumni/scholarships"
-    );
-    this.setState({ courses });
-  };
-
   openModal = () => {
     this.setState({ showModal: true });
   };
@@ -290,11 +282,17 @@ class Home extends Component {
     this.setState({ showModal: false });
   };
 
+  handleCourses = courses => {
+    this.setState({ showModal: false });
+    this.setState({ courses });
+  };
+
   render() {
+    console.log(this.state.courses);
     return (
       <All>
         {this.state.showModal && (
-          <Modal modal={this.closeModal} courses={this.state.courses} />
+          <Modal modal={this.closeModal} courses={this.handleCourses} />
         )}
 
         <header>
